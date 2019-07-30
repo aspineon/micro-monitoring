@@ -4,6 +4,8 @@ services:
   # === LOGS ===
   elasticsearch:
     image:  docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    volumes:
+      - ./configs/elasticsearch/elasticsearch.yml:/usr/share/elasticserach/config/elasticsearch.yml:ro #load config stored in repository
     environment:
       - discovery.type=single-node #run elasticsearch as a standalone server, not a node
     ulimits:
@@ -17,6 +19,6 @@ services:
   kibana:
     image: docker.elastic.co/elasticsearch/kibana:7.2.0
     volumes:
-      - ./configs/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml #load config stored in repository
+      - ./configs/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro #load config stored in repository
     ports:
       - 5601:5601
