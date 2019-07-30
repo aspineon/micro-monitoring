@@ -1,0 +1,30 @@
+version: '3.5'
+
+services:
+  # === LOGS ===
+  elasticsearch:
+    image:  docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+
+    # load config stored in repository
+    # uncomment when needed
+    # volumes:
+    #   - ./configs/elasticsearch/elasticsearch.yml:/usr/share/elasticserach/config/elasticsearch.yml:ro 
+    environment:
+      - discovery.type=single-node #run elasticsearch as a standalone server, not a node
+    ulimits:
+      memlock: #set unlimited memory for processes. Required by elasticsearch
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.2.0
+
+    #load config stored in repository
+    # uncomment when needed
+    # volumes:
+    #   - ./configs/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro 
+    ports:
+      - 5601:5601
