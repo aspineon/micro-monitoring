@@ -58,6 +58,8 @@ services:
       - 9090:9090
     depends_on:
       - cadvisor
+      - node-exporter
+      - rabbit-exporter
     restart: always
 
     # analytics and monitoring platform
@@ -98,3 +100,25 @@ services:
     ports:
       - 8080:8080
     restart: always
+
+    # rabbitmq metrics exporter
+  rabbit-exporter:
+    image: kbudde/rabbitmq-exporter
+    network_mode: service:rabbit
+    environment:
+      RABBIT_USER: "rabbitmq"
+      RABBIT_PASSWORD: "rabbitmq"
+    depends_on:
+      - rabbit
+
+  # === SERVICES ===
+  rabbit:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - 15672:15672
+      - 5672:5672
+      - 9419:9419
