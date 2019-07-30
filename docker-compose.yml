@@ -19,6 +19,23 @@ services:
       - 9200:9200
       - 9300:9300
 
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.2.0
+    volumes:
+    # load config shored in repository
+    # uncomment when needed
+    #  - ./configs/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+
+    # Folder with Logstash pipeline configs
+      - ./configs/logstash/:/usr/share/logstash/pipeline:ro
+    ports:
+      - 5000:5000
+      - 9600:9600
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    depends_on:
+      - elasticsearch
+
   kibana:
     image: docker.elastic.co/kibana/kibana:7.2.0
 
